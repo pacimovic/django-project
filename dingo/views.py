@@ -80,5 +80,3 @@ def delete(request, id):
 
     return redirect('/')
 
-def nesto(request):
-    pass
