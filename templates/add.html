@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Add Food</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+    <form action="add" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <pre>Name:      <input type="text" name="name" required=""></pre>
+    <br>
+    <pre>Image:     <input type="file" name="img" required=""></pre>
+    <br>
+    <pre>Desc:      <textarea rows="7" cols="100" name="desc" required=""></textarea></pre>
+    <br>
+    <pre>Price:     <input type="text" name="price" required=""></pre>
+    <br>
+    <div>
+        {% for message in messages %}
+        <h3 style="color:red">{{message}}</h3>
+        {% endfor %}
+    </div>
+    <button >Save</button>
+    </form>
+    <a href="/">Nazad</a>
+</body>
+</html>

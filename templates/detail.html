@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Details</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+
+    {% if user.is_authenticated %}
+    <div class="single_food_item media">
+        <img src="{{food.img.url}}" class="mr-3" alt="...">
+        <div class="media-body align-self-center">
+            <h3>{{food.name}}</h3>
+            <p>{{food.desc}}</p>
+            <h5>${{food.price}}</h5>
+            {% if user.is_superuser %}
+            <form action="/delete/{{food.id}}">
+                <button type="submit">Delete</button>
+           </form>
+           {% endif %}
+        </div>
+
+        
+    </div>
+    {% else %}
+    <h1 style="color:red">You must login first!</h1>
+    {% endif %}
+
+    <a href="/">Nazad</a>
+</body>
+</html>
