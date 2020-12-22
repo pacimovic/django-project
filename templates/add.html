@@ -11,14 +11,17 @@
 <body>
     <form action="add" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <pre>Name:      <input type="text" name="name" required=""></pre>
+    {{form.as_p}}
+    <!--
+    <pre>Name:      {{form.name}}</pre>
     <br>
-    <pre>Image:     <input type="file" name="img" required=""></pre>
+    <pre>Image:     {{form.img}}</pre>
     <br>
-    <pre>Desc:      <textarea rows="7" cols="100" name="desc" required=""></textarea></pre>
+    <pre>Desc:      {{form.desc}}</pre>
     <br>
-    <pre>Price:     <input type="text" name="price" required=""></pre>
+    <pre>Price:     {{form.price}}</pre>
     <br>
+    -->
     <div>
         {% for message in messages %}
         <h3 style="color:red">{{message}}</h3>

@@ -5,6 +5,7 @@ from django.conf import settings
 from .models import Food
 from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
+from .forms import AddNewFood
 
 # Create your views here.
 
@@ -37,37 +38,46 @@ def detail(request, detail):
     if(Food.objects.filter(id=detail).exists()):
         food=Food.objects.get(id=detail)
         
-    
     return render(request,"detail.html",{'food':food})
 
 
 def add(request):        
     if(request.method=='POST'):
 
-        name=request.POST['name']
+        form = AddNewFood(request.POST,request.FILES)
+        
+        '''name=request.POST['name']
         img=request.FILES['img']
         desc=request.POST['desc']
-        price=request.POST['price']
+        price=request.POST['price']'''
+        if form.is_valid():
+            name=form.cleaned_data['name']
+            img=form.cleaned_data['img']
+            desc=form.cleaned_data['desc']
+            price=form.cleaned_data['price']
 
-        try:
-            pass
-            tmp = int(price)
-        except ValueError:
-            messages.info(request,'Mora Broj!')
-            return render(request,"add.html")
+            try:
+                pass
+                tmp = int(price)
+            except ValueError:
+                messages.info(request,'Mora Broj!')
+                return render(request,"add.html",{'form':form})
+            else:
+                price=tmp
+                #fs=FileSystemStorage()
+                #fs.save(img.name,img)
+
+                newFood=Food(name=name,img=img,desc=desc,price=price)
+                newFood.save()
+
+            return redirect('/')
         else:
-            price=tmp
-            #fs=FileSystemStorage()
-            #fs.save(img.name,img)
-
-            newFood=Food(name=name,img=img,desc=desc,price=price)
-            newFood.save()
-
-        return redirect('/')
-
-
+            #nije validna forma
+            messages.info(request,'nije validna forma')
+            return render(request,"add.html",{'form':form})
     else:
-        return render(request,"add.html")
+        form = AddNewFood()
+        return render(request,"add.html",{'form':form})
 
 
 def delete(request, id):
