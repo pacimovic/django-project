@@ -16,6 +16,7 @@ def login(request):
             user =auth.authenticate(username=username,password=password)
             if(user is not None):
                 auth.login(request,user)
+                messages.info(request,'Login successful')
                 return redirect("/")
             else:
                 messages.info(request,'Invalid username or password')
@@ -51,6 +52,7 @@ def register(request):
                     user=User.objects.create_user(username=username,password=password1,email=email,first_name=first_name,last_name=last_name)
                     user.save()
                     print('user created')
+                    messages.info(request,'Register successful')
                     return redirect('login')
             else:
                 messages.info(request,'password not matching...')
@@ -68,4 +70,5 @@ def register(request):
 
 def logout(request):
     auth.logout(request)
+    messages.info(request,'Logout successful')
     return redirect('/')

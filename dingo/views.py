@@ -15,7 +15,6 @@ def index(request):
     return render(request,"index.html",{'foods' : foods})
 
 
-
 def search(request):
     
     foods=Food.objects.all()
@@ -45,11 +44,7 @@ def add(request):
     if(request.method=='POST'):
 
         form = AddNewFood(request.POST,request.FILES)
-        
-        '''name=request.POST['name']
-        img=request.FILES['img']
-        desc=request.POST['desc']
-        price=request.POST['price']'''
+
         if form.is_valid():
             name=form.cleaned_data['name']
             img=form.cleaned_data['img']
@@ -69,7 +64,8 @@ def add(request):
 
                 newFood=Food(name=name,img=img,desc=desc,price=price)
                 newFood.save()
-
+            
+            messages.info(request,'Food created successful!')
             return redirect('/')
         else:
             #nije validna forma
