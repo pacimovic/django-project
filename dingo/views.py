@@ -6,6 +6,8 @@ from .models import Food
 from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
 from .forms import AddNewFood
+from django.shortcuts import get_object_or_404
+
 
 # Create your views here.
 
@@ -28,14 +30,18 @@ def search(request):
             elif(str(food.price)==search):
                 newFoods.append(food)
         foods=newFoods 
+        if not foods:
+            messages.info(request,'Food not find!') 
 
     return render(request,"index.html",{'foods' : foods})
 
 
 def detail(request, detail):
-
-    if(Food.objects.filter(id=detail).exists()):
-        food=Food.objects.get(id=detail)
+    food = get_object_or_404(Food, id=detail)
+    if food is not None:
+        print('uso je BLALALALAL')
+    #if(Food.objects.filter(id=detail).exists()):
+     #   food=Food.objects.get(id=detail)
         
     return render(request,"detail.html",{'food':food})
 
@@ -77,12 +83,19 @@ def add(request):
 
 
 def delete(request, id):
-    if(Food.objects.filter(id=id).exists()):
+
+    food = get_object_or_404(Food, id=id)
+    if food is not None:
+        fs=FileSystemStorage()
+        fs.delete(food.img.name)
+        food.delete()
+
+    '''if(Food.objects.filter(id=id).exists()):
         food=Food.objects.get(id=id)
 
         fs=FileSystemStorage()
         fs.delete(food.img.name)
-        food.delete()
+        food.delete()'''
 
     return redirect('/')
 
