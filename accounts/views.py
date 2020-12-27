@@ -20,8 +20,8 @@ def login(request):
                     messages.info(request,'Login successful')
                     return redirect("/")
                 else:
-                    if not user.is_superuser:
-                        messages.info(request,'Your account doesnt have acces to this page')
+                    if not user.is_superuser and nxt == '/add':
+                        messages.info(request,'Your account doesnt have access to this page')
                     return redirect(nxt)
             else:
                 messages.info(request,'Invalid username or password')

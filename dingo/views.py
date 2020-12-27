@@ -40,7 +40,6 @@ def search(request):
 @login_required
 def detail(request, detail):
     food = get_object_or_404(Food, id=detail)
-    
         
     return render(request,"detail.html",{'food':food})
 
