@@ -7,7 +7,6 @@ from .forms import CreateNewUser, CheckUser
 
 def login(request):
     if(request.method=='POST'):
-        
         form = CheckUser(request.POST)
         if form.is_valid():
             username=form.cleaned_data['username']
@@ -16,13 +15,22 @@ def login(request):
             user =auth.authenticate(username=username,password=password)
             if(user is not None):
                 auth.login(request,user)
-                messages.info(request,'Login successful')
-                return redirect("/")
+                nxt = request.GET.get("next", None)
+                if nxt is None:
+                    messages.info(request,'Login successful')
+                    return redirect("/")
+                else:
+                    if not user.is_superuser:
+                        messages.info(request,'Your account doesnt have acces to this page')
+                    return redirect(nxt)
             else:
                 messages.info(request,'Invalid username or password')
                 return render(request,'login.html',{"form":form})
 
     else:
+        nxt = request.GET.get("next", None)
+        if nxt is not None:
+            messages.info(request,'Please login to see this page.')
         form = CheckUser()
         return render(request,'login.html',{"form":form})
 

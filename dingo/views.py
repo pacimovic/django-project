@@ -7,6 +7,7 @@ from django.core.files.storage import FileSystemStorage
 from django.contrib import messages
 from .forms import AddNewFood
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required, permission_required
 
 
 # Create your views here.
@@ -36,16 +37,15 @@ def search(request):
     return render(request,"index.html",{'foods' : foods})
 
 
+@login_required
 def detail(request, detail):
     food = get_object_or_404(Food, id=detail)
-    if food is not None:
-        print('uso je BLALALALAL')
-    #if(Food.objects.filter(id=detail).exists()):
-     #   food=Food.objects.get(id=detail)
+    
         
     return render(request,"detail.html",{'food':food})
 
 
+@permission_required('domaci.add_food')
 def add(request):        
     if(request.method=='POST'):
 
@@ -82,6 +82,7 @@ def add(request):
         return render(request,"add.html",{'form':form})
 
 
+@permission_required('domaci.delete_food')
 def delete(request, id):
 
     food = get_object_or_404(Food, id=id)
@@ -90,12 +91,6 @@ def delete(request, id):
         fs.delete(food.img.name)
         food.delete()
 
-    '''if(Food.objects.filter(id=id).exists()):
-        food=Food.objects.get(id=id)
-
-        fs=FileSystemStorage()
-        fs.delete(food.img.name)
-        food.delete()'''
 
     return redirect('/')
 
